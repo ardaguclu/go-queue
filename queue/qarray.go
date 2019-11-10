@@ -2,12 +2,12 @@ package queue
 
 import "sync"
 
-type Array struct {
+type QArray struct {
 	Items []interface{}
 	L     *sync.Mutex
 }
 
-func (q *Array) Push(n interface{}) {
+func (q *QArray) Push(n interface{}) {
 	if q.L != nil {
 		q.L.Lock()
 		defer q.L.Unlock()
@@ -15,7 +15,7 @@ func (q *Array) Push(n interface{}) {
 	q.Items = append(q.Items, n)
 }
 
-func (q *Array) Pop() (n interface{}) {
+func (q *QArray) Pop() (n interface{}) {
 	if q.Len() > 0 {
 		if q.L != nil {
 			q.L.Lock()
@@ -29,7 +29,7 @@ func (q *Array) Pop() (n interface{}) {
 	return
 }
 
-func (q *Array) Len() int {
+func (q *QArray) Len() int {
 	if q.L != nil {
 		q.L.Lock()
 		defer q.L.Unlock()

@@ -5,12 +5,12 @@ import (
 	"sync"
 )
 
-type List struct {
+type QList struct {
 	Items *list.List
 	L     *sync.Mutex
 }
 
-func (l *List) Push(n interface{}) {
+func (l *QList) Push(n interface{}) {
 	if l.L != nil {
 		l.L.Lock()
 		defer l.L.Unlock()
@@ -18,7 +18,7 @@ func (l *List) Push(n interface{}) {
 	l.Items.PushBack(n)
 }
 
-func (l *List) Pop() (n interface{}) {
+func (l *QList) Pop() (n interface{}) {
 	if l.Len() > 0 {
 		if l.L != nil {
 			l.L.Lock()
@@ -32,7 +32,7 @@ func (l *List) Pop() (n interface{}) {
 	return
 }
 
-func (l *List) Len() int {
+func (l *QList) Len() int {
 	if l.L != nil {
 		l.L.Lock()
 		defer l.L.Unlock()

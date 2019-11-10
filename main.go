@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	qArr := &queue.Array{
+	qArr := &queue.QArray{
 		Items: nil,
 		L:     new(sync.Mutex),
 	}
@@ -18,7 +18,7 @@ func main() {
 
 	fmt.Println(qArr.Pop())
 
-	qList := &queue.List{
+	qList := &queue.QList{
 		Items: list.New(),
 		L:     new(sync.Mutex),
 	}
