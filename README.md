@@ -1,5 +1,7 @@
 # Go Queue Implementations
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/ardaguclu/go-queue)](https://goreportcard.com/report/github.com/ardaguclu/go-queue)
+
 There is no queue implementation in the standard library. 
 That's why, package queue includes two different types of queue implementations, 
 which are slice based/list based and their benchmark results are shown below. 
