@@ -3,57 +3,61 @@ package queue
 import (
 	"container/list"
 	"fmt"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestQListPush(t *testing.T) {
-	qList := &QList{
+func TestCQListPush(t *testing.T) {
+	cqList := &CQList{
 		Items: new(list.List),
+		L:     new(sync.Mutex),
 	}
 
 	for i := 0; i < 100; i++ {
-		qList.Push(fmt.Sprintf("Item-%d", i))
-		assert.Equal(t, i+1, qList.Len())
+		cqList.Push(fmt.Sprintf("Item-%d", i))
+		assert.Equal(t, i+1, cqList.Len())
 	}
 }
 
-func TestQListPop(t *testing.T) {
+func TestCQListPop(t *testing.T) {
 	tmpList := new(list.List)
 	tmpList.PushBack("test1")
 	tmpList.PushBack("test2")
-	qList := &QList{
+	cqList := &CQList{
 		Items: tmpList,
+		L:     new(sync.Mutex),
 	}
 
-	val := qList.Pop()
+	val := cqList.Pop()
 	assert.Equal(t, val.(string), "test1")
-	val = qList.Pop()
+	val = cqList.Pop()
 	assert.Equal(t, val.(string), "test2")
 }
 
-func BenchmarkQListPush(b *testing.B) {
-	qList := &QList{
+func BenchmarkCQListPush(b *testing.B) {
+	cqList := &CQList{
 		Items: new(list.List),
+		L:     new(sync.Mutex),
 	}
 
 	for i := 0; i < b.N; i++ {
-		qList.Push(fmt.Sprintf("Item-%d", i))
+		cqList.Push(fmt.Sprintf("Item-%d", i))
 	}
 }
 
-func BenchmarkQListPop(b *testing.B) {
+func BenchmarkCQListPop(b *testing.B) {
 	tmpList := new(list.List)
 	for i := 0; i < 10000; i++ {
 		tmpList.PushBack(fmt.Sprintf("test-%d", i))
 	}
-
-	qList := &QList{
+	cqList := &CQList{
 		Items: tmpList,
+		L:     new(sync.Mutex),
 	}
 
 	for i := 0; i < b.N; i++ {
-		qList.Pop()
+		cqList.Pop()
 	}
 }

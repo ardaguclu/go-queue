@@ -2,56 +2,61 @@ package queue
 
 import (
 	"fmt"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestQArrayPush(t *testing.T) {
-	qArr := &QArray{
+func TestCQArrayPush(t *testing.T) {
+	cqArr := &CQArray{
 		Items: nil,
+		L:     new(sync.Mutex),
 	}
 
 	for i := 0; i < 100; i++ {
-		qArr.Push(fmt.Sprintf("Item-%d", i))
-		assert.Equal(t, i+1, len(qArr.Items))
+		cqArr.Push(fmt.Sprintf("Item-%d", i))
+		assert.Equal(t, i+1, len(cqArr.Items))
 	}
 }
 
-func TestQArrayPop(t *testing.T) {
+func TestCQArrayPop(t *testing.T) {
 	tmpItems := make([]interface{}, 0, 2)
 	tmpItems = append(tmpItems, "test1")
 	tmpItems = append(tmpItems, "test2")
-	qArr := &QArray{
+	cqArr := &CQArray{
 		Items: tmpItems,
+		L:     new(sync.Mutex),
 	}
 
-	val := qArr.Pop()
+	val := cqArr.Pop()
 	assert.Equal(t, val.(string), "test1")
-	val = qArr.Pop()
+	val = cqArr.Pop()
 	assert.Equal(t, val.(string), "test2")
 }
 
-func BenchmarkQArrayPush(b *testing.B) {
-	qArr := &QArray{
+func BenchmarkCQArrayPush(b *testing.B) {
+	cqArr := &CQArray{
 		Items: nil,
+		L:     new(sync.Mutex),
 	}
 
 	for i := 0; i < b.N; i++ {
-		qArr.Push(fmt.Sprintf("Item-%d", i))
+		cqArr.Push(fmt.Sprintf("Item-%d", i))
 	}
 }
 
-func BenchmarkQArrayPop(b *testing.B) {
+func BenchmarkCQArrayPop(b *testing.B) {
 	tmpItems := make([]interface{}, 0, 1024)
 	for i := 0; i < 10000; i++ {
 		tmpItems = append(tmpItems, fmt.Sprintf("test-%d", i))
 	}
-	qArr := &QArray{
+	cqArr := &CQArray{
 		Items: tmpItems,
+		L:     new(sync.Mutex),
 	}
 
 	for i := 0; i < b.N; i++ {
-		qArr.Pop()
+		cqArr.Pop()
 	}
 }

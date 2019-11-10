@@ -2,28 +2,28 @@ package queue
 
 import (
 	"container/list"
-	"sync"
 )
 
+// QList is container/list based standard queue implementation without thread safety for concurrent access.
 type QList struct {
 	Items *list.List
-	L     *sync.Mutex
 }
 
-func (l *QList) Push(n interface{}) {
-	if l.L != nil {
-		l.L.Lock()
-		defer l.L.Unlock()
+// NewQList initializes and returns new QList.
+func NewQList() *QList {
+	return &QList{
+		Items: new(list.List),
 	}
+}
+
+// Push adds new item tail of the queue.
+func (l *QList) Push(n interface{}) {
 	l.Items.PushBack(n)
 }
 
+// Pop returns first item from the queue.
 func (l *QList) Pop() (n interface{}) {
 	if l.Len() > 0 {
-		if l.L != nil {
-			l.L.Lock()
-			defer l.L.Unlock()
-		}
 		e := l.Items.Front()
 		l.Items.Remove(e)
 		n = e.Value
@@ -32,10 +32,7 @@ func (l *QList) Pop() (n interface{}) {
 	return
 }
 
+// Len returns the item length of queue.
 func (l *QList) Len() int {
-	if l.L != nil {
-		l.L.Lock()
-		defer l.L.Unlock()
-	}
 	return l.Items.Len()
 }
