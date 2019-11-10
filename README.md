@@ -1,5 +1,6 @@
 # Go Queue Implementations
 
+[![GoDoc](https://godoc.org/github.com/ardaguclu/go-queue/queue?status.png)](http://godoc.org/github.com/ardaguclu/go-queue/queue)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ardaguclu/go-queue)](https://goreportcard.com/report/github.com/ardaguclu/go-queue)
 
 There is no queue implementation in the standard library. 
